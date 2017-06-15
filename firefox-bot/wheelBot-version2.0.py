@@ -42,8 +42,8 @@ def leftClick(handle, coord, name, pause=1):
     time.sleep(pause)
     
 def sellItem(handle, string):
+    leftClick(handle, sellBox, 'sellBox', 0)
     for char in string:
-        leftClick(handle, sellBox, 'sellBox', 0)
         win32api.SendMessage(handle, win32con.WM_CHAR, ord(char), None)
 
 def imageCap(handle):
