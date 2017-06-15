@@ -70,7 +70,7 @@ def imageCap(handle):
     win32gui.ReleaseDC(handle, hwndDC)
     if result == 1:
         return image
-
+    
 def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     method = eval(method)
     img = np.array(imageCap(handle))
