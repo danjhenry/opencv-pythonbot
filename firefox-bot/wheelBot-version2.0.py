@@ -245,6 +245,7 @@ def main():
     newName = loginInfo.readline()
     url = loginInfo.readline()
     print('windowName: ', newName, ' ', 'url: ', url)
+    #possibly use .join function instead of string addition.
     command = 'start firefox.exe \"' + url + '\"'
     os.popen(command)
     time.sleep(5)
