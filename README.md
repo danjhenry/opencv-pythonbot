@@ -4,63 +4,37 @@ Automation of a web-browser based game using opencv template matching functions 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+* save the 
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+To begin with make sure you have python 3 or higher (this perticular program was built on python 3.5.3).
 
-```
-Give examples
-```
+* pip installs.
+1. pip install pillow
+2. pip install numpy
+3. pip install pypiwin32
+4. pip install python-opencv
+
+* Software installs
+1. [firefox 32bit](https://www.mozilla.org/en-US/firefox/new/?scene=2)
+2. [flash player](https://get.adobe.com/flashplayer/)
+
+After installing all the require imports and software the script should be able to run on any windows 8 - windows 10 system.
 
 ### Installing
+* First run the setup.py script to set login info and the window name.
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+* Then start the main script and do not minimize the browser window as it prevents windows from captureing the image of the game.
+  for the best experiance use virutal windows for the scripted windows.
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+* deploy up to 8 instances of the script per machine or VM due to adobe flash player limits.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [IDLE](https://en.wikipedia.org/wiki/IDLE)
 
 ## Authors
 
