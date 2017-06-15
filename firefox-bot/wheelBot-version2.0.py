@@ -88,7 +88,6 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     top_left = max_loc
     bottom_right = (top_left[0] + w, top_left[1] + h)
     coord = [int(round(top_left[0] + (w/2))), int(round(top_left[1] + (h/2)))]
-    #coord = [int(round(num)) for num in coord]
     return coord
 
 def imageClick(button, handle, pause=1):
