@@ -1,16 +1,16 @@
 # opencv-pythonbot
 
-Automation of a web-browser based game using opencv template matching functions and windows api as a control method.
+Automation of a web-browser based game (galaxy online 2) using opencv template matching functions and windows api as a control method.
 
 ## Getting Started
 
-* save the 
+* Save the firefox-bot folder for the wheel script and save the collection script for automated collection. 
 
 ### Prerequisites
 
 To begin with make sure you have python 3 or higher (this perticular program was built on python 3.5.3).
 
-* pip installs.
+* PIP installs.
 1. pip install pillow
 2. pip install numpy
 3. pip install pypiwin32
@@ -30,7 +30,8 @@ After installing all the require imports and software the script should be able 
 
 ## Deployment
 
-* deploy up to 8 instances of the script per machine or VM due to adobe flash player limits.
+* Deploy up to 8 instances of the script per machine or VM due to adobe flash player limits.
+* Deploy collection script on another VM or machine to prevent collusion.
 
 ## Built With
 
