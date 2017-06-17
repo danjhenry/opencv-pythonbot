@@ -26,7 +26,7 @@ After installing all the require imports and software the script should be able 
 * First run the setup.py script to set login info and the window name.
 
 * Then start the main script and do not minimize the browser window as it prevents windows from captureing the image of the game.
-  for the best experiance use virutal windows for the scripted windows.
+  for the best experiance use a Virtual Machine for the scripted windows.
 
 ## Deployment
 
