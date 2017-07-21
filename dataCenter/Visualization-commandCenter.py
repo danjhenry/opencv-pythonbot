@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
+with open('firefox-bot/config/iframe.txt', 'r') as loginInfo:
+    newName = loginInfo.readline()
+    newName = newName.rstrip()
+    
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
