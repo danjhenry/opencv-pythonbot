@@ -2,9 +2,10 @@ import win32api, win32gui, win32ui, win32con
 from PIL import Image
 from ctypes import *
 import numpy as np
+import pickle
+import time
 import cv2
 import os
-import time
 
 #Physical Locations
 wepCenterLoc = [606, 133]
@@ -42,8 +43,8 @@ def leftClick(handle, coord, name, pause=1):
     time.sleep(pause)
     
 def sellItem(handle, string):
-    leftClick(handle, sellBox, 'sellBox', 0)
     for char in string:
+        leftClick(handle, sellBox, 'sellBox', 0)
         win32api.SendMessage(handle, win32con.WM_CHAR, ord(char), None)
 
 def imageCap(handle):
@@ -70,7 +71,7 @@ def imageCap(handle):
     win32gui.ReleaseDC(handle, hwndDC)
     if result == 1:
         return image
-    
+
 def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     method = eval(method)
     img = np.array(imageCap(handle))
@@ -101,7 +102,9 @@ def imageClick(button, handle, pause=1):
     return False
 
 def construct(loc, handle, building, tab):
-    imageClick('build', handle)
+    if(imageClick('build', handle) == False):
+        print('failed to find build 1')
+        imageClick('build2', handle)
     imageClick('constructBuilding', handle)
     imageClick(tab, handle)
     if(imageClick(building, handle) == False):
@@ -123,15 +126,34 @@ def wheelSpin(handle):
         if(imageClick('wheelOk', handle) == False):
             break
         imageClick('spinNow', handle)
-    return spins 
+    return spins
+
+def load_obj(name):
+    try:
+        with open('statistics/' + name + '.pkl', 'rb') as f:
+            return pickle.load(f)
+    except:
+        return False
+    
+def save_obj(stats, name):
+    with open('statistics/' + name + '.pkl', 'wb') as f:
+        pickle.dump(stats, f, pickle.HIGHEST_PROTOCOL)
 
 def core(handle, newName):
+    stats = load_obj(newName)
+    if(stats == False):
+        stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0, 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
     openables = ('skillBoat', 'superCase', 'superBoat')
-    cardTypes = ('skill', 'Super', 'legendary', 'Superstar')
+    cardTypes = ('skill', 'super', 'legendary', '3starSuper', '3starSkill')
+    drops = ('skill', 'legendary', 'super')
     total = 0
     while True:
         imageClick('beginOk', handle, 5)
-        imageClick('cancel', handle, 3)
+        while(True):
+            if(imageClick('cancel', handle, 3)):
+                break
+            else:
+                time.sleep(10)
         imageClick('mail', handle)
         if(imageClick('welcome', handle) == False):
             imageClick('selectAll', handle)  
@@ -148,6 +170,7 @@ def core(handle, newName):
         imageClick('commandCenter', handle)
         imageClick('commandCenterEnter', handle)
         imageClick('drawCom', handle)
+        stats['draws'] += 1
         imageClick('comExit', handle)
         imageClick('spaceBase', handle)
         imageClick('tutorial', handle)
@@ -156,24 +179,21 @@ def core(handle, newName):
         imageClick('wheelOk', handle, 1)
         imageClick('spinNow', handle, 1)
         imageClick('voucherCheck', handle)
-        total += wheelSpin(handle)
+        total = wheelSpin(handle)
         imageClick('spinEnd', handle)
         imageClick('MyTools', handle)
         imageClick('bag', handle)
-        for item in (openables + cardTypes):
+        for item in (drops):
             if(imageSearch(item, handle[0])):
-                error = False
+                stats[item] += 1
+        for item in (cardTypes + openables):
+            if(imageSearch(item, handle[0])):
                 for case in openables:
-                    if(imageSearch(case, handle[0])):
+                    while(imageSearch(case, handle[0])):
+                        stats[case] += 1
                         imageClick(case, handle)
-                        if(imageClick('use', handle) == False):
-                            imageClick('spinEnd', handle)
-                            error = True
-                            break
-                        else:
-                            imageClick('collect', handle)  
-                if(error):
-                    break
+                        imageClick('use', handle)
+                        imageClick('collect', handle)  
                 imageClick('exitBag', handle)
                 imageClick('groundBase', handle)
                 imageClick('civicCenter', handle)
@@ -208,12 +228,11 @@ def core(handle, newName):
                         imageClick('spaceBase', handle)
                         break
                     time.sleep(10)
-                if(error == False):
-                    break
-        print('No commanders in bag.')
+        else:
+            print('No commanders in bag.')
         imageClick('exitBag', handle)
-        if(imageClick('galaxy', handle) == False):
-            imageClick('galaxy2', handle)
+        if(imageClick('galaxy2', handle) == False):
+            imageClick('galaxy', handle)
         imageClick('ursa', handle)
         imageClick('abandonPlanet', handle, 1)
         imageClick('abandonOk', handle)
@@ -225,6 +244,9 @@ def core(handle, newName):
             imageClick('MyTools', handle)
             imageClick('toolMail', handle)
             if(imageClick('selectAll', handle) == False):
+                imageClick('deleteMail', handle)
+                imageClick('deleteMailOk', handle)
+            else:
                 while(imageClick('welcome', handle) or imageClick('sale', handle)):
                     imageClick('deleteMail', handle)
                     imageClick('deleteMailOk', handle)
@@ -237,15 +259,16 @@ def core(handle, newName):
             imageClick('abandonOk', handle)
             imageClick('abandonOk2', handle, 5)
             handle = windowHandle(newName, newName)
-        print('Total number of vouchers used ', total*5) 
+        stats['vouchers'] += total*5
+        save_obj(stats, newName)
         time.sleep(15)
-
+        
 def main():
     loginInfo = open('config/iframe.txt', 'r')
     newName = loginInfo.readline()
+    newName = newName.rstrip()
     url = loginInfo.readline()
     print('windowName: ', newName, ' ', 'url: ', url)
-    #possibly use .join function instead of string addition.
     command = 'start firefox.exe \"' + url + '\"'
     os.popen(command)
     time.sleep(5)
