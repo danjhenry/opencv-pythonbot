@@ -6,7 +6,7 @@ import pickle
 def load_obj(name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
-stats = load_obj('stats')
+stats = load_obj('/firefox-bot/statistics/')
 print(stats)
 v = stats['vouchers']
 spins = v/5
