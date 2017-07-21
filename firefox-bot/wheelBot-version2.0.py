@@ -142,7 +142,8 @@ def save_obj(stats, name):
 def core(handle, newName):
     stats = load_obj(newName)
     if(stats == False):
-        stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0, 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
+        stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0,
+                 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
     openables = ('skillBoat', 'superCase', 'superBoat')
     cardTypes = ('skill', 'super', 'legendary', '3starSuper', '3starSkill')
     drops = ('skill', 'legendary', 'super')
