@@ -1,0 +1,1 @@
+After each Cycle the bot will save a statistics file as a .pkl binary file containint a hash table with statistical information.
