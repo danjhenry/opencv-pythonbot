@@ -17,7 +17,7 @@ def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
             print('ERROR: could not find handle.')
             time.sleep(5)
     h1 = 0
-    while(h1 == 0):
+    while h1 == 0:
         h1 = win32gui.FindWindowEx( h0, None, 'MozillaWindowClass', None)
         h2 = win32gui.FindWindowEx( h1, None, 'GeckoPluginWindow', None)
         h3 = win32gui.FindWindowEx( h2, None, 'GeckoFPSandboxChildWindow', None)
@@ -69,7 +69,7 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     res = cv2.matchTemplate(grayImg, template, method)
     threshold = .8
     loc = np.where( res >= threshold)
-    if(len(loc[0]) == 0):
+    if len(loc[0]) == 0:
         print('Image not found')
         return False
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
@@ -81,7 +81,7 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
 def imageClick(button, handle, pause=1):
     for tries in range(2):
         coord = imageSearch(button, handle[0])
-        if(coord != False):
+        if coord:
             leftClick(handle[1], coord, button, pause)
             return True
         else:
@@ -93,7 +93,7 @@ def core(handle, newName):
     imageClick('social', handle)
     imageClick('AH', handle)
     totalCollected = 0
-    while(True):
+    while True:
         if totalCollected >= 40:
             imageClick('exit', handle)
             imageClick('mail', handle)
@@ -119,7 +119,7 @@ def core(handle, newName):
                         break
                 else:
                     break
-            if(imageSearch('MP', handle[0])):
+            if imageSearch('MP', handle[0]):
                 print('mp found')
                 break
             if imageSearch('nextPage', handle[0]):
