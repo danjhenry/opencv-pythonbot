@@ -25,7 +25,7 @@ def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
             print('ERROR: could not find handle.')
             time.sleep(5)
     h1 = 0
-    while(h1 == 0):
+    while h1 == 0:
         h1 = win32gui.FindWindowEx( h0, None, 'MozillaWindowClass', None)
         h2 = win32gui.FindWindowEx( h1, None, 'GeckoPluginWindow', None)
         h3 = win32gui.FindWindowEx( h2, None, 'GeckoFPSandboxChildWindow', None)
@@ -70,7 +70,7 @@ def imageCap(handle, log=False):
     mfcDC.DeleteDC()
     win32gui.ReleaseDC(handle, hwndDC)
     if result == 1:
-        if(result == 1 and log == True):
+        if log:
             image.save('sniper.png')
         return image
 
@@ -84,7 +84,7 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     res = cv2.matchTemplate(grayImg, template, method)
     threshold = .8
     loc = np.where( res >= threshold)
-    if(len(loc[0]) == 0):
+    if len(loc[0]) == 0:
         print('Image not found')
         return False
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
@@ -96,7 +96,7 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
 def imageClick(button, handle, pause=1):
     for tries in range(2):
         coord = imageSearch(button, handle[0])
-        if(coord != False):
+        if coord:
             leftClick(handle[1], coord, button, pause)
             return True
         else:
@@ -104,16 +104,16 @@ def imageClick(button, handle, pause=1):
     return False
 
 def construct(loc, handle, building, tab):
-    if(imageClick('build', handle) == False):
+    if not imageClick('build', handle):
         print('failed to find build 1')
         imageClick('build2', handle)
     imageClick('constructBuilding', handle)
     imageClick(tab, handle)
-    if(imageClick(building, handle) == False):
+    if not imageClick(building, handle):
         imageClick('comExit', handle)
         return False
     leftClick(handle[1], loc, building)
-    if(building != 'weaponCenterB'):
+    if building != 'weaponCenterB':
         imageClick('upgradeArrow', handle)
         imageClick('voucherOk', handle)
 
@@ -121,11 +121,11 @@ def wheelSpin(handle):
     spins = 0
     while True:
         spins += 1
-        if(imageSearch('exitFriend', handle[0])):
+        if imageSearch('exitFriend', handle[0]):
             imageClick('exitFriend', handle)
         imageClick('buyAndSpin', handle)
         time.sleep(10)
-        if(imageClick('wheelOk', handle) == False):
+        if not imageClick('wheelOk', handle):
             break
         imageClick('spinNow', handle)
     return spins
@@ -143,7 +143,7 @@ def save_obj(stats, name):
 
 def core(handle, newName):
     stats = load_obj(newName)
-    if(stats == False):
+    if not stats:
         stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0, 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
     openables = ('skillBoat', 'superCase', 'superBoat')
     cardTypes = ('skill', 'super', 'legendary', '3starSuper', '3starSkill')
@@ -156,15 +156,15 @@ def core(handle, newName):
             time.sleep(5)
         if imageSearch('beginOk', handle[0]):    
             imageClick('beginOk', handle, 5)
-        while(True):
-            if(imageClick('cancel', handle, 3)):
+        while True:
+            if imageClick('cancel', handle, 3):
                 break
             else:
                 time.sleep(10)
-        if(imageSearch('mail', handle[0])):
+        if imageSearch('mail', handle[0]):
             time.sleep(2)
             imageClick('mail', handle)
-            if(imageClick('welcome', handle) == False):
+            if imageClick('welcome', handle) == False:
                 imageClick('selectAll', handle)  
             imageClick('deleteMail', handle)
             imageClick('deleteMailOk', handle)
@@ -193,12 +193,12 @@ def core(handle, newName):
         imageClick('MyTools', handle)
         imageClick('bag', handle)
         for item in (drops):
-            if(imageSearch(item, handle[0])):
+            if imageSearch(item, handle[0]):
                 stats[item] += 1
         for item in (cardTypes + openables):
-            if(imageSearch(item, handle[0])):
+            if imageSearch(item, handle[0]):
                 for case in openables:
-                    while(imageSearch(case, handle[0])):
+                    while imageSearch(case, handle[0]):
                         stats[case] += 1
                         imageClick(case, handle)
                         imageClick('use', handle)
@@ -219,17 +219,17 @@ def core(handle, newName):
                 imageClick('card', handle)
                 imageClick('sellPrice', handle)
                 for card in cardTypes:
-                    while(imageSearch(card, handle[0])):
+                    while imageSearch(card, handle[0]):
                         imageClick(card, handle)
                         imageClick('sellBox', handle)
                         sellItem(handle[1], '1')
                         imageClick('finalSell', handle)
                 imageClick('comExit', handle, 10)
                 while True:
-                    if(imageSearch('mail', handle[0])):
+                    if imageSearch('mail', handle[0]):
                         time.sleep(20)
                         imageClick('mail', handle)
-                        while(imageSearch('sale', handle[0])):
+                        while imageSearch('sale', handle[0]):
                             imageClick('sale', handle)
                             if not imageSearch('auth', handle[0]):
                                 imageCap(handle[0], True)
@@ -242,23 +242,23 @@ def core(handle, newName):
         else:
             print('No commanders in bag.')
         imageClick('exitBag', handle)
-        if(imageClick('galaxy2', handle) == False):
+        if imageClick('galaxy2', handle) == False:
             imageClick('galaxy', handle)
         imageClick('ursa', handle)
         imageClick('abandonPlanet', handle, 1)
         imageClick('abandonOk', handle)
         imageClick('abandonOk2', handle, 5)
         handle = windowHandle(newName, newName)
-        if(imageSearch('failed', handle[0])):
+        if imageSearch('failed', handle[0]):
             imageClick('mailLeft', handle)
             imageClick('Return', handle)
             imageClick('MyTools', handle)
             imageClick('toolMail', handle)
-            if(imageClick('selectAll', handle) == False):
+            if imageClick('selectAll', handle) == False:
                 imageClick('deleteMail', handle)
                 imageClick('deleteMailOk', handle)
             else:
-                while(imageClick('welcome', handle) or imageClick('sale', handle)):
+                while imageClick('welcome', handle) or imageClick('sale', handle):
                     imageClick('deleteMail', handle)
                     imageClick('deleteMailOk', handle)
             imageClick('deleteMail', handle)
