@@ -26,7 +26,7 @@ def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
     win32gui.SetWindowText(h0, newName)
     return [h1, h3]        
         
-def leftClick(handle, coord, name, pause=1):
+def leftClick(handle, coord, name, pause=.5):
     x, y = [pos for pos in coord]
     lParam = (y << 16 | x)
     win32gui.SendMessage(handle, win32con.WM_LBUTTONDOWN, None, lParam)
@@ -89,38 +89,41 @@ def imageClick(button, handle, pause=1):
     return False
 
 def core(handle, newName):
-    collections = 0
     imageClick('cancel', handle)
     imageClick('social', handle)
     imageClick('AH', handle)
-    imageClick('card', handle)
+    totalCollected = 0
     while(True):
-        imageClick('card', handle)
-        imageClick('endOfList', handle)
-        for x in range(4):
-            while(imageSearch('buy', handle[0])):
-                imageClick('buy', handle)
-                imageClick('purchase', handle)
-                imageClick('buyOk', handle)
-                collections += 1
-            if(imageSearch('MP', handle[0])):
-                print('mp found')
-                break 
-            imageClick('nextPage', handle)
-        if(collections >= 40):
-            imageClick('comExit', handle)
+        if totalCollected >= 40:
+            imageClick('exit', handle)
             imageClick('mail', handle)
-            for x in range(collections):
+            while imageSearch('purchaseSuccessful', handle[0]):
                 imageClick('purchaseSuccessful', handle)
                 imageClick('allCharge', handle)
                 imageClick('deleteMail', handle)
-            collections = 0
-            imageClick('mailExit', handle)
+            imageClick('exit', handle)
             imageClick('social', handle)
             imageClick('AH', handle)
-            imageClick('card', handle)
-        else:
-            time.sleep(1)
+            totalCollected = 0
+            
+        imageClick('card', handle)
+        if imageSearch('endOfList', handle[0]):
+            imageClick('endOfList', handle)
+        for x in range(5):
+            for x in range(5):
+                if imageSearch('buy', handle[0]):
+                    imageClick('buy', handle)
+                    imageClick('purchase', handle)
+                    if imageClick('buyOk', handle):
+                        totalCollected += 1
+                        break
+                else:
+                    break
+            if(imageSearch('MP', handle[0])):
+                print('mp found')
+                break
+            if imageSearch('nextPage', handle[0]):
+                imageClick('nextPage', handle)
        
 def main():
     loginInfo = open('config/iframe.txt', 'r')
