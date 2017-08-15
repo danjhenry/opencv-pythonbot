@@ -47,7 +47,7 @@ def sellItem(handle, string):
         leftClick(handle, sellBox, 'sellBox', 0)
         win32api.SendMessage(handle, win32con.WM_CHAR, ord(char), None)
 
-def imageCap(handle):
+def imageCap(handle, log=False):
     left, top, right, bot = win32gui.GetWindowRect(handle)
     w = right - left
     h = bot - top
@@ -70,6 +70,8 @@ def imageCap(handle):
     mfcDC.DeleteDC()
     win32gui.ReleaseDC(handle, hwndDC)
     if result == 1:
+        if(result == 1 and log == True):
+            image.save('sniper.png')
         return image
 
 def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
@@ -142,37 +144,43 @@ def save_obj(stats, name):
 def core(handle, newName):
     stats = load_obj(newName)
     if(stats == False):
-        stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0,
-                 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
+        stats = {'skillBoat' : 0, 'superCase' : 0, 'superBoat' : 0, 'skill' : 0, 'legendary' : 0,  'vouchers' : 0, 'draws' : 0, 'super' : 0}
     openables = ('skillBoat', 'superCase', 'superBoat')
     cardTypes = ('skill', 'super', 'legendary', '3starSuper', '3starSkill')
     drops = ('skill', 'legendary', 'super')
     total = 0
     while True:
-        imageClick('beginOk', handle, 5)
+        while not imageSearch('beginOk', handle[0]):
+            if imageSearch('cancel', handle[0]):
+                break
+            time.sleep(5)
+        if imageSearch('beginOk', handle[0]):    
+            imageClick('beginOk', handle, 5)
         while(True):
             if(imageClick('cancel', handle, 3)):
                 break
             else:
                 time.sleep(10)
-        imageClick('mail', handle)
-        if(imageClick('welcome', handle) == False):
-            imageClick('selectAll', handle)  
-        imageClick('deleteMail', handle)
-        imageClick('deleteMailOk', handle)
-        imageClick('exitMail', handle)
-        imageClick('warehouse', handle)
-        imageClick('harvest', handle)
-        imageClick('MyTools', handle)
-        imageClick('Quest', handle)
-        imageClick('getQuest', handle)
-        imageClick('exitQuest', handle)
-        construct(comCenterLoc, handle, 'commandCenterB', 'military')
-        imageClick('commandCenter', handle)
-        imageClick('commandCenterEnter', handle)
-        imageClick('drawCom', handle)
-        stats['draws'] += 1
-        imageClick('comExit', handle)
+        if(imageSearch('mail', handle[0])):
+            time.sleep(2)
+            imageClick('mail', handle)
+            if(imageClick('welcome', handle) == False):
+                imageClick('selectAll', handle)  
+            imageClick('deleteMail', handle)
+            imageClick('deleteMailOk', handle)
+            imageClick('exitMail', handle)
+            imageClick('warehouse', handle)
+            imageClick('harvest', handle)
+            imageClick('MyTools', handle)
+            imageClick('Quest', handle)
+            imageClick('getQuest', handle)
+            imageClick('exitQuest', handle)
+            construct(comCenterLoc, handle, 'commandCenterB', 'military')
+            imageClick('commandCenter', handle)
+            imageClick('commandCenterEnter', handle)
+            imageClick('drawCom', handle)
+            stats['draws'] += 1
+            imageClick('comExit', handle)
         imageClick('spaceBase', handle)
         imageClick('tutorial', handle)
         imageClick('luckyWheel', handle)
@@ -222,7 +230,9 @@ def core(handle, newName):
                         time.sleep(20)
                         imageClick('mail', handle)
                         while(imageSearch('sale', handle[0])):
-                            imageClick('sale', handle) 
+                            imageClick('sale', handle)
+                            if not imageSearch('auth', handle[0]):
+                                imageCap(handle[0], True)
                             imageClick('deleteMail', handle)
                             imageClick('deleteMailOk', handle)
                         imageClick('exitMail', handle)
@@ -277,4 +287,3 @@ def main():
     print(handle)
     core(handle, newName)
 main()
-    
