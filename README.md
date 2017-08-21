@@ -14,7 +14,7 @@ To begin with make sure you have python 3 or higher (this perticular program was
 1. pip install pillow
 2. pip install numpy
 3. pip install pypiwin32
-4. pip install python-opencv
+4. pip install opencv-python
 
 * Software installs
 1. [firefox 32bit](https://www.mozilla.org/en-US/firefox/new/?scene=2)
