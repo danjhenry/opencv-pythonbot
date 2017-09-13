@@ -24,15 +24,8 @@ def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
         except:
             print('ERROR: could not find handle.')
             time.sleep(5)
-    h1 = 0
-    while h1 == 0:
-        h1 = win32gui.FindWindowEx( h0, None, 'MozillaWindowClass', None)
-        h2 = win32gui.FindWindowEx( h1, None, 'GeckoPluginWindow', None)
-        h3 = win32gui.FindWindowEx( h2, None, 'GeckoFPSandboxChildWindow', None)
-        time.sleep(1)
-    time.sleep(2)
     win32gui.SetWindowText(h0, newName)
-    return [h1, h3]        
+    return [h0, h0]        
         
 def leftClick(handle, coord, name, pause=1):
     x, y = [pos for pos in coord]
