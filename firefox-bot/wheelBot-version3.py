@@ -8,11 +8,12 @@ import cv2
 import os
 
 #Physical Locations
-wepCenterLoc = [606, 133]
-tradeCenterLoc = [80, 400]
-comCenterLoc = [262, 153]
-techCenterLoc = [420, 70]
-sellBox = [735, 295]
+#emergency patch (+ 116)
+wepCenterLoc = [606, 133 + 116]
+tradeCenterLoc = [80, 400 + 116]
+comCenterLoc = [262, 153 + 116]
+techCenterLoc = [420, 70 + 116]
+sellBox = [735, 295 + 116]
 
 def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
     while True:
@@ -25,6 +26,7 @@ def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
             print('ERROR: could not find handle.')
             time.sleep(5)
     win32gui.SetWindowText(h0, newName)
+    #firefox 50 changed the way it handles iframes.
     return [h0, h0]        
         
 def leftClick(handle, coord, name, pause=1):
