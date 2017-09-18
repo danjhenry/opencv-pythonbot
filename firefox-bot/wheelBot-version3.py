@@ -73,7 +73,7 @@ def imageSearch(obj, handle, method='cv2.TM_CCOEFF_NORMED'):
     method = eval(method)
     img = np.array(imageCap(handle))
     grayImg = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    path = 'Gray/' + obj + '.png'
+    path = 'Gray/{}.png'.format(obj)
     template = cv2.imread(path, cv2.IMREAD_UNCHANGED)
     w, h = template.shape[::-1]
     res = cv2.matchTemplate(grayImg, template, method)
@@ -127,13 +127,13 @@ def wheelSpin(handle):
 
 def load_obj(name):
     try:
-        with open('statistics/' + name + '.pkl', 'rb') as f:
+        with open('statistics/{}.pkl'.format(name), 'rb') as f:
             return pickle.load(f)
     except:
         return False
     
 def save_obj(stats, name):
-    with open('statistics/' + name + '.pkl', 'wb') as f:
+    with open('statistics/{}.pkl'.format(name), 'wb') as f:
         pickle.dump(stats, f, pickle.HIGHEST_PROTOCOL)
 
 def core(handle, newName):
@@ -274,8 +274,8 @@ def main():
     newName = loginInfo.readline()
     newName = newName.rstrip()
     url = loginInfo.readline()
-    print('windowName: ', newName, ' ', 'url: ', url)
-    command = 'start firefox.exe \"' + url + '\"'
+    print('windowName: {} url: {}'.format(newName, url))
+    command = 'start firefox.exe {}'.format(url)
     os.popen(command)
     time.sleep(5)
     handle = windowHandle(newName)
