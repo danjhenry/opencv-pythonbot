@@ -8,12 +8,11 @@ import cv2
 import os
 
 #Physical Locations
-#emergency patch (+ 116)
-wepCenterLoc = [606, 133 + 116]
-tradeCenterLoc = [80, 400 + 116]
-comCenterLoc = [262, 153 + 116]
-techCenterLoc = [420, 70 + 116]
-sellBox = [735, 295 + 116]
+wepCenterLoc = [606, 249]
+tradeCenterLoc = [80, 516]
+comCenterLoc = [262, 269]
+techCenterLoc = [420, 186]
+sellBox = [735, 401]
 
 def windowHandle(newName, defaultName='iframe - Mozilla Firefox'):
     while True:
